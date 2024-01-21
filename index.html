@@ -1,0 +1,119 @@
+<html>
+<head>
+  <title></title>
+  <script type="text/javascript" src="sudoku.js"></script>
+  <script type="text/javascript" src="analytics.js"></script>
+  <style type="text/css">
+
+    body { font-family: Calibri, sans-serif; }
+    #container { text-align: center }
+    table { border-collapse: collapse; font-size: 2em; margin: 0 auto; }
+    colgroup, tbody { border: solid medium; }
+    td { border: solid thin; height: 1.4em; width: 1.4em; text-align: center; padding: 0; }
+    button { margin-top: 15px; font-size: 1.5em; }
+    
+    padd{padding-bottom: 100px;}
+    
+  </style>
+</head>
+<body>
+  
+    
+  <div id="container">
+
+    <h1 class = "padd">Sudoku Solver</h1>
+
+    <table id="sudoku-board">
+      
+      
+      <colgroup><col><col><col>
+      <colgroup><col><col><col>
+      <colgroup><col><col><col>
+      <tbody>
+       <tr> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td>
+       <tr> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td>     
+       <tr> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td>
+      <tbody>
+       <tr> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td>
+       <tr> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td>     
+       <tr> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td>
+      <tbody>
+       <tr> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td>
+       <tr> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td>     
+       <tr> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td>
+    </table>
+    <div>
+      <button id="solve-button">Solve!</button>
+    </div>
+    <div>
+      <button id="clear-button">Clear board</button>
+    </div>
+  </div>
+</body>
+
+<script type="text/javascript"> //This line starts a JavaScript code block within an HTML document. It specifies that the content within this script tag is JavaScript code.
+  document.getElementById("sudoku-board").addEventListener("keyup", function(event) //This line adds an event listener to an element with the ID "sudoku-board." It listens for the "keyup" event, which occurs when a key on the keyboard is released. When the event is triggered, it executes an anonymous function that takes an event parameter.
+  {
+    if(event.target && event.target.nodeName == "TD") {
+      var validNum = /[1-9]/; //This line creates a regular expression named validNum that matches any single digit from 1 to 9. Regular expressions are used for pattern matching.
+      var tdEl = event.target; //This line assigns the event's target element (the table cell) to a variable named tdEl for easier reference.
+      if (tdEl.innerText.length > 0 && validNum.test(tdEl.innerText[0])) //This line checks if the table cell's text content (.innerText) has a length greater than 0 (i.e., it's not empty) and if the first character of the text content (index 0) matches the regular expression validNum. In other words, it checks if the input is a valid single-digit number.
+       {
+        tdEl.innerText = tdEl.innerText[0]; //If the input is valid, this line sets the text content of the table cell (tdEl) to be only the first character of the existing text content. This ensures that only the valid number remains in the cell.
+      } else {
+        tdEl.innerText = "";//Inside the "else" block, this line sets the text content of the table cell (tdEl) to an empty string, effectively clearing any non-numeric or invalid input.
+      }
+    }
+  });
+
+  document.getElementById("solve-button").addEventListener("click", function(event) //This line adds an event listener to an HTML element with the ID "solve-button."It listens for the "click" event, which occurs when the user clicks the element. When the "click" event is detected, it triggers an anonymous function that takes an event parameter.
+  {
+    var boardString = boardToString(); //This line declares a variable named boardString and assigns it the result of a function call to boardToString().
+// Presumably, the boardToString function converts the current state of the Sudoku board into a string format that represents the board's configuration.
+    var solution = SudokuSolver.solve(boardString); //This line declares a variable named solution and assigns it the result of calling the solve function on the SudokuSolver object.
+//t passes the boardString as an argument to the solve function.
+//The solve function is expected to attempt to solve the Sudoku puzzle based on the provided board configuration and return a solution if one exists.
+    if (solution) {
+      stringToBoard(solution);
+    } else {
+      alert("Invalid board!");
+    }
+  })
+
+  document.getElementById("clear-button").addEventListener("click", clearBoard);
+
+  function clearBoard() {
+    var tds = document.getElementsByTagName("td");
+    for (var i = 0; i < tds.length; i++) {
+      tds[i].innerText = "";
+    }
+  }
+
+  function boardToString() {
+    var string = "";
+    var validNum = /[1-9]/;
+    var tds = document.getElementsByTagName("td");
+    for (var i = 0; i < tds.length; i++) {
+      if (validNum.test(tds[i].innerText[0])) {
+        string += tds[i].innerText;
+      } else {
+        string += "-";
+      }
+    }
+    return string;
+  }
+
+  function stringToBoard(string) {
+    var currentCell;
+    var validNum = /[1-9]/;
+    var cells = string.split("");
+    var tds = document.getElementsByTagName("td");
+    for (var i = 0; i < tds.length; i++) {
+      currentCell = cells.shift();
+      if (validNum.test(currentCell)) {
+        tds[i].innerText = currentCell;
+      }
+    }
+  }
+</script>
+</html>
